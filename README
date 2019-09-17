@@ -1,0 +1,29 @@
+                            ___             
+                        __ /\_ \            
+ _____   __  __  _____ /\_\\//\ \     ___   
+/\ '__`\/\ \/\ \/\ '__`\/\ \ \ \ \   / __`\ 
+\ \ \L\ \ \ \_\ \ \ \L\ \ \ \ \_\ \_/\ \L\ \
+ \ \ ,__/\/`____ \ \ ,__/\ \_\/\____\ \____/
+  \ \ \/  `/___/> \ \ \/  \/_/\/____/\/___/ 
+   \ \_\     /\___/\ \_\                    
+    \/_/     \/__/  \/_/                    
+
+
+    ./process.py -i image 
+                 -o $HOME/work/code/py/pypilo/image
+
+    -i source image directory
+    -o processed image destination directory
+
+    
+2019SEP17
+* lots of internal changes
+- moved PIL code into pil_tools.py
+- other tools into tools.py
+- added BUGS, TODO
+
+* check TODO
+* copying to remote repro
+* documentation
+* fixed the bugs in BUGS
+* working on this for a while

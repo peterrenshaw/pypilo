@@ -1,0 +1,20 @@
+                            ___             
+                        __ /\_ \            
+ _____   __  __  _____ /\_\\//\ \     ___   
+/\ '__`\/\ \/\ \/\ '__`\/\ \ \ \ \   / __`\ 
+\ \ \L\ \ \ \_\ \ \ \L\ \ \ \ \_\ \_/\ \L\ \
+ \ \ ,__/\/`____ \ \ ,__/\ \_\/\____\ \____/
+  \ \ \/  `/___/> \ \ \/  \/_/\/____/\/___/ 
+   \ \_\     /\___/\ \_\                    
+    \/_/     \/__/  \/_/                    
+
+
+OK 
+2019SEP14
+1 * problems with resizing
+  - specified image constraints (by H)
+  - resized the image by percentage (h/3.5 and w/3.5
+  - but this wrong so work this out so the ratio is maintained
+
+1 * problems with selecting filenames in uppercase
+  - can't re ad filenames if uppercase
