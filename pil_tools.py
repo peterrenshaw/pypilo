@@ -38,7 +38,7 @@ HEIGHT = 1000   # hard coded height max
 # calc_image_size: resize height and width given ratio
 #                  this is specifically for flickr
 #----------
-def calc_image_size(width, height, ratio, WIDTH, HEIGHT):
+def calc_image_size(width, height, ratio, resize_width=WIDTH, resize_height=HEIGHT):
     """  
     given height, width and ration: resize image width, height 
     and known image ratio, resize width and height to fixed 
@@ -46,11 +46,11 @@ def calc_image_size(width, height, ratio, WIDTH, HEIGHT):
     """
     # image is wider than higher
     if width > height:
-        w = WIDTH
+        w = resize_width #WIDTH
         h = int(w / ratio)
     # image is taller than wider
     elif width < height:
-        w = HEIGHT
+        w = resize_height #HEIGHT
         h = int(w / ratio)
     # image is square
     else:

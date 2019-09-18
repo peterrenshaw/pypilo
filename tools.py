@@ -25,7 +25,7 @@ import datetime
 
 
 #------ debug start ---------
-DEBUG = False
+DEBUG = True
 def msg(msg):
     if DEBUG: print("> {}".format(msg))
 #------ debug end ---------

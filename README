@@ -15,6 +15,10 @@
     -i source image directory
     -o processed image destination directory
 
+2019SEP18
+* bug on pil_tools.py
+- function calc_image_size with barfed args
+- fixed
     
 2019SEP17
 * lots of internal changes
