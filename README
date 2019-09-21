@@ -15,7 +15,10 @@
     -i source image directory
     -o processed image destination directory
 
+
 2019SEP21
+* added viewdate.py to test for dates
+- changed from UTC to localtime for dates created
 * curating the source
 - pil_resize has a problem because it shoves thru all files
   not just jpgs which I want to resize. 
