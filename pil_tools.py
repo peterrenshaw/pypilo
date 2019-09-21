@@ -20,6 +20,8 @@
 
 
 import os
+import sys
+from shutil import copyfile   # copy big .mp4 files
 
 
 import PIL
@@ -100,19 +102,32 @@ def pil_image_ratio(fp, fn):
 #---------
 # name: pil_resize
 # desc: grab an image, 
-#       resize the image to the supplied dimensions
+#       resize the image to the supplied dimensions. we
+#       assume the source directory is pre-edited so if 
+#       we still handle .mp4s. Control is done by editing
+#       which files are in the source file.
+#
+# warn: THIS FUNCTION MOVES THE FILES TO A DESTINATION DIR.
+#
+# bugs: if we find a filetype we do not support, we flag this
+#       as an error and continue. It's also a good idea to 
+#       modify the filename to reflect if you want to use
+#       the file. If you want to use the file, you will 
+#       have to copy the file over.
 #---------
 def pil_resize(src_fp, dest_fp, s_fn, d_fn):
     msg("source fp <{}>".format(src_fp))
     msg("dest   fp <{}>".format(dest_fp))
-    try:
-        # source filepath and nasrc_fp,me:
-        sfpn = os.path.join(src_fp, s_fn)
-        msg("src <{}>".format(sfpn))
 
-        # destination filepath and name
-        dfpn = os.path.join(dest_fp, d_fn)   
-        msg("dest <{}>".format(dfpn))
+    # source filepath and nasrc_fp,me:
+    sfpn = os.path.join(src_fp, s_fn)
+    msg("src <{}>".format(sfpn))
+
+    # destination filepath and name
+    dfpn = os.path.join(dest_fp, d_fn)   
+    msg("dest <{}>".format(dfpn))
+
+    try:
 
         # original image
         i = Image.open(sfpn)
@@ -137,9 +152,19 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn):
 
         i = None
         ir = None
+   
     except IOError:
+        # we haven't found a way to process this
+        # file, skip but still WARN
         print("Error: unable to resize image")
+        print("Error: unable to move image file")
+        print("\tfilename  <{}>".format(s_fn))
+        print("\tsource fp <{}>".format(src_fp))
+        print("\tdest   fp <{}>".format(dest_fp))
         sys.exit(1)
+
+    return True
+
 #---------
 # name: pil_detail
 # desc: grab an image, 

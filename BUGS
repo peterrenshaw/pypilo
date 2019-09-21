@@ -9,7 +9,36 @@
     \/_/     \/__/  \/_/                    
 
 
-OK 
+FAIL
+2019SEP21
+* problem with sys module in pil_tools.py
+- known: we identifing an mp4 file
+
+* error reported:
+
+    OSError: cannot identify image file '/Users/pr/work/flickr/2019/2019SEP/2019SEP21/d/IMG_6353.m4v'
+    During handling of the above exception, another exception occurred:
+    Traceback (most recent call last):
+      File "./process.py", line 130, in <module>
+        main()
+      File "./process.py", line 114, in main
+        process(s_fp, dest_fp, s_fn, d_fn)
+      File "./process.py", line 51, in process
+        pil_resize(src_fp, dest_fp, s_fn, d_fn)
+      File "/Users/pr/work/code/py/pypilo/pil_tools.py", line 142, in pil_resize
+      sys.exit(1)
+      NameError: name 'sys' is not defined
+
+* what I found: 
+- trying to process a list of files, the code ran into a mp4 file and threw an error
+
+* steps to reproduce:
+
+   ./process.py -i $HOME/work/code/flickr/2019/2019SEP/2019SEP21/d -o $HOME/work/code/flickr/2019/2019SEP/2019SEP21/u
+
+* what I want:
+- to be able to process files with various different file types and handle the result.
+ 
 2019SEP14
 1 * problems with resizing
   - specified image constraints (by H)

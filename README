@@ -15,6 +15,15 @@
     -i source image directory
     -o processed image destination directory
 
+2019SEP21
+* curating the source
+- pil_resize has a problem because it shoves thru all files
+  not just jpgs which I want to resize. 
+- introduce idea of curating the source file so we control
+  what is processed by what is in the source directory.
+- that is until we write code to handle the edge cases such
+  as mp4s, gifs etc.
+
 2019SEP18
 * bug on pil_tools.py
 - function calc_image_size with barfed args

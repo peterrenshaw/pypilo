@@ -4,7 +4,8 @@
 
 #======
 # name: tools.py
-# date: 2019SEP17
+# date: 2019SEP21
+#       2019SEP17
 #       2019SEP06
 #       2019AUG11
 #       2016FEB03
@@ -25,7 +26,7 @@ import datetime
 
 
 #------ debug start ---------
-DEBUG = True
+DEBUG = False
 def msg(msg):
     if DEBUG: print("> {}".format(msg))
 #------ debug end ---------
@@ -44,19 +45,27 @@ def msg(msg):
 #       SS   = %S  -- second, zero padded
 #------
 DTF_YYYYMMMDDTHHMMSS = "%Y%b%dT%H:%M.%S"
-DTF_YYYYMMMDDTHHMMSS_FN = "%Y%b%d%H%M.%S"
+DTF_YYYYMMMDDTHHMMSS_FN = "%Y%b%d%H%M%S"
 
+#---------
+# dt_date2str: convert datetime to string format for filenames
+#  
+# desc: 2019SEP21 removed dot due to truncation on flickr        
+#---------
 def dt_date2str(dt, dt_format=DTF_YYYYMMMDDTHHMMSS):
     """convert a valid date time to a string format"""
     if dt_format:
         dts = dt.strftime(dt_format)
-        time_delta = format(time.process_time(), '.3f')
-        dts = "{}.{}".format(dts, time_delta)
+        time_delta = format(time.process_time(), '.3f')    # remove dot
+        dts = "{}{}".format(dts, time_delta)              # remove dot
         dts = dts.upper()
         return dts 
     else:
         return ""
-def dt_get_now(is_utc=True):
+#---------
+# dt_get_now: WARNING have set to local time not UTC
+#---------
+def dt_get_now(is_utc=False):
     """return current, now  date time"""
     if is_utc:
         return datetime.datetime.utcnow()
@@ -95,14 +104,14 @@ def get_filenames(filepathdirectory, file_type="*.*"):
     types of files to select.
     """
     fpd = filepathdirectory
-    msg("get_filenames.filepath <{}>".format(fpd))
+    msg("tools.get_filenames.filepath <{}>".format(fpd))
 
     if os.path.isdir(fpd):
        fpn = os.path.join(fpd, file_type)
        files = glob.glob(fpn)
 
-       msg("fpn <{}>".format(fpn))
-       msg("get_filenames <{}>".format(files))
+       msg("tools.get_filenames.fpn <{}>".format(fpn))
+       msg("tools.get_filenames <{}>".format(files))
  
        return files
     else:
