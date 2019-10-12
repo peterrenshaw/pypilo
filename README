@@ -16,6 +16,10 @@
     -o processed image destination directory
 
 2019OCT12
+* had to reset the IP for gitolite access
+
+  git remote set-url origin git@ip.address:pypilo
+
 * wrapper for processing for image and videos
 - new function processing.process()
 
