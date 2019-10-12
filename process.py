@@ -47,8 +47,54 @@ IMG_JPG = 'jpg'
 VID_M4V = 'm4v'
 
 
+
 #---------
 # name: process
+# desc: wrapper for image and video processing
+# args: afiles - list of filepathnames
+#---------
+def process(afiles, dest_fp):
+    if len(afiles) > 0: 
+        # loop through the list of files
+        msg("processing")
+  
+        afs = sorted(afiles)
+        for s_fpn in afs:
+            s_fp, s_fn = filepath2title(s_fpn)
+            msg("source <{}> <{}>".format(s_fp, s_fn))
+            if s_fn:
+                if os.path.isfile(s_fpn):
+                    # process the files one by one
+                    if is_file_jpg(s_fn):
+                        print('.', end='', flush=True)
+                        d_fn = dt_build_fn()
+                        process_image(s_fp, dest_fp, s_fn, d_fn)
+
+                    elif is_file_video(s_fn):
+                        print('+', end='', flush=True)
+                        d_fn = dt_build_fn(ext=VID_M4V)
+                        process_video(s_fp, dest_fp, s_fn, d_fn)
+
+                    else: 
+                        print("Warning: file not processed")
+                        print("\t<{}>".format(s_fn))
+
+                else:
+                    print("warning: the source file is not found")
+                    print("         <{}>".format(s_fn))
+                    pass
+            else:
+               break    
+        print("")
+
+        return True
+    else:
+        # load all files found
+        return False
+
+
+#---------
+# name: process_image
 # desc: given the parameters, process a list of urls
 #       and upload them.
 # TODO: find todays date in YYYY,YYYYMMM format and add as 
@@ -58,7 +104,7 @@ def process_image(src_fp, dest_fp, s_fn, d_fn):
     pil_resize(src_fp, dest_fp, s_fn, d_fn)
     pil_detail(dest_fp, d_fn)
 
-def process_video(src_fp, dest_fp, s_fn, d_fn):
+def process_video(src_fp):
     """process all the videos"""
     # move the file (we still want to use it)
     sfpn = os.path.join(src_fp, s_fn)
@@ -113,6 +159,7 @@ def main():
         # only load 'jpg' images
         msg("path: <{}>".format(options.input))
         if options.jpg:
+            
             afiles = get_fn_jpg(options.input)
         else:
             afiles = get_filenames(options.input)
@@ -127,44 +174,10 @@ def main():
 
 
         msg("destination: ({}) <{}>".format(len(afiles), afiles))
-        if len(afiles) > 0: 
-            # loop through the list of files
-            msg("processing")
-  
-            afs = sorted(afiles)
-            for s_fpn in afs:
-                s_fp, s_fn = filepath2title(s_fpn)
-                msg("source <{}> <{}>".format(s_fp, s_fn))
-                if s_fn:
-                    if os.path.isfile(s_fpn):
-                        # process the files one by one
-          
-                        if is_file_jpg(s_fn):
-                            print('.', end='', flush=True)
-                            d_fn = dt_build_fn()
-                            process_image(s_fp, dest_fp, s_fn, d_fn)
-
-                        elif is_file_video(s_fn):
-                            print('+', end='', flush=True)
-                            d_fn = dt_build_fn(ext=VID_M4V)
-                            process_video(s_fp, dest_fp, s_fn, d_fn)
-
-                        else: 
-                            print("Warning: file not processed")
-                            print("\t<{}>".format(s_fn))
-
-                    else:
-                        print("warning: the source file is not found")
-                        print("         <{}>".format(s_fn))
-                        pass
-                else:
-                    break
-      
-            print("") 
-        else:
-            # load all files found
-            pass
-
+        if not process(afiles, dest_fp):
+            print("Error: processing files has failed")
+            sys.exit(1)
+        
 
 #----- main cli entry point ------
 if __name__ == "__main__":

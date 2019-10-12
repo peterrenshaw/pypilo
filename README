@@ -15,6 +15,14 @@
     -i source image directory
     -o processed image destination directory
 
+2019OCT12
+* wrapper for processing for image and videos
+- new function processing.process()
+
+  process(afiles, dest_fp)
+
+  afiles:  list of filepathsnames 
+  dest_fp: destination filepath
 
 2019SEP21
 * added viewdate.py to test for dates
