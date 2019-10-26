@@ -9,6 +9,8 @@
     \/_/     \/__/  \/_/                    
 
 
+2019OCT26
+* fix for .png files on command, see BUGS
 
 2019SEP21
 * identify file before you process

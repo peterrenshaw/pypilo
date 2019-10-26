@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # ~*~ encoding: utf-8 ~*~
 
 
@@ -7,7 +7,7 @@
 # date: 2019SEP21
 #       2019SEP10
 # prog: pr
-# desc: process a file ready or flickr
+# desc: process a file ready for flickr
 # algo: 
 #       given source directory
 #           process all images

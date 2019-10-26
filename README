@@ -14,9 +14,44 @@
 
     -i source image directory
     -o processed image destination directory
+    -h help
+
+    nb: updated ip for gitolite? 
+        try 'git remote set-url origin git@ip.address:pypilo'
+
+
+2019OCT26
+* New bug listed (is it? but I should solve)
+- fails: problem with input
+- doesn't work with .PNG
+
+* fails on /usr/bin/python
+- works on /usr/bin env python3
+
+* failed first use today
+- pil_tools failed on running using py3
+- solution?
+
+  sudo port selfupdate
+  sudo port upgrade updated
+
+- re-install Pillow
+  <https://pillow.readthedocs.io/en/latest/installation.html>
+
+  $ sudo pip install Pillow
+  $ python3 process.py -h 
+
+  Options:
+  -h, --help            show this help message and exit
+  -i INPUT, --input=INPUT
+                        input source directory
+  -o OUTPUT, --output=OUTPUT
+                        output source directory
+  -j, --jpg             process only jpg files
 
 2019OCT12
 * had to reset the IP for gitolite access
+- <https://stackoverflow.com/questions/2432764/how-to-change-the-uri-url-for-a-remote-git-repository>
 
   git remote set-url origin git@ip.address:pypilo
 

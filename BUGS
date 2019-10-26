@@ -10,6 +10,42 @@
 
 
 FAIL
+2019OCT26
+* problem with input files of differing types to .jpg
+
+* error reported
+- without debug
+./process.py -i $HOME/work/flickr/2019/2019OCT/2019OCT26/* -o $HOME/work/flickr/2019/2019OCT/2019OCT26/u
+.Warning: file not processed
+	<2019OCT261432261.png>
+
+- debug
+./process.py -i $HOME/work/flickr/2019/2019OCT/2019OCT26/* -o $HOME/work/flickr/2019/2019OCT/2019OCT26/u
+> path: </Users/pr/work/flickr/2019/2019OCT/2019OCT26/d>
+> tools.get_filenames.filepath </Users/pr/work/flickr/2019/2019OCT/2019OCT26/d>
+> tools.get_filenames.fpn </Users/pr/work/flickr/2019/2019OCT/2019OCT26/d/*.*>
+> tools.get_filenames <['/Users/pr/work/flickr/2019/2019OCT/2019OCT26/d/2019OCT261432261.png', '/Users/pr/work/flickr/2019/2019OCT/2019OCT26/d/2019OCT261432260.jpg']>
+> files ['/Users/pr/work/flickr/2019/2019OCT/2019OCT26/d/2019OCT261432261.png', '/Users/pr/work/flickr/2019/2019OCT/2019OCT26/d/2019OCT261432260.jpg']
+> destination: (2) <['/Users/pr/work/flickr/2019/2019OCT/2019OCT26/d/2019OCT261432261.png', '/Users/pr/work/flickr/2019/2019OCT/2019OCT26/d/2019OCT261432260.jpg']>
+> processing
+> source </Users/pr/work/flickr/2019/2019OCT/2019OCT26/d> <2019OCT261432260.jpg>
+.
+> source fp </Users/pr/work/flickr/2019/2019OCT/2019OCT26/d>
+> dest   fp </Users/pr/work/flickr/2019/2019OCT/2019OCT26/u>
+> src </Users/pr/work/flickr/2019/2019OCT/2019OCT26/d/2019OCT261432260.jpg>
+> dest </Users/pr/work/flickr/2019/2019OCT/2019OCT26/u/2019OCT261626480.267.jpg>
+> height <384>
+> width  <685>
+> ratio <1.7838541666666667>
+> setting image w<1330> h<745> r<1.7838541666666667>
+> 1330:745
+> <2019OCT261626480.267.jpg>
+	format(JPEG) size((1330, 745)) mode:(RGB)
+> source </Users/pr/work/flickr/2019/2019OCT/2019OCT26/d> <2019OCT261432261.png>
+Warning: file not processed
+	<2019OCT261432261.png>
+
+FAIL
 2019SEP21
 * problem with sys module in pil_tools.py
 - known: we identifing an mp4 file
