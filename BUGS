@@ -10,6 +10,21 @@
 
 
 FAIL
+2019OCT29
+* problems with non-standard sized images
+
+* error reported 
+- debug on 
+- post fix
+
+  $ ./process.py -i $HOME/work/flickr/2019/2019OCT/2019OCT29/d -o /Users/pr/work/flickr/2019/2019OCT/2019OCT29/u
+  $ Warning: unable to resize image
+
+* a couple of problems looked at:
+- resize of non-standard image (fixed)
+- print errors instead of using debug
+  
+
 2019OCT26
 * problem with input files of differing types to .jpg
 

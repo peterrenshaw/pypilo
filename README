@@ -19,6 +19,15 @@
     nb: updated ip for gitolite? 
         try 'git remote set-url origin git@ip.address:pypilo'
 
+2019OCT29
+* ran into a problem with a smaller non standard image
+- would not upload or resize and halted to workflow
+- just as it was designed too.
+
+* So I re-figured the code to allow for any size and 
+- resize to the specified ratio.
+
+* fixed so exits report errors to console
 
 2019OCT26
 * New bug listed (is it? but I should solve)

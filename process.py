@@ -4,7 +4,8 @@
 
 #======
 # name: process.py
-# date: 2019SEP21
+# date: 2019OCT29
+#       2019SEP21
 #       2019SEP10
 # prog: pr
 # desc: process a file ready for flickr
@@ -101,8 +102,16 @@ def process(afiles, dest_fp):
 #       default tags
 #---------
 def process_image(src_fp, dest_fp, s_fn, d_fn):
-    pil_resize(src_fp, dest_fp, s_fn, d_fn)
-    pil_detail(dest_fp, d_fn)
+    if not pil_resize(src_fp, dest_fp, s_fn, d_fn):
+      sfpn = os.path.join(src_fp, s_fn)
+      dfpn = os.path.join(dest_fp, d_fn)
+      msg("warning: image <{}> cannot be resized".format(sfpn))
+      msg("move <{}> to <{}>".format(sfpn, dfpn))
+      copyfile(sfpn, dfpn)    
+      #sys.exit(1)
+      return False
+    else:
+      return True
 
 def process_video(src_fp):
     """process all the videos"""
@@ -114,7 +123,7 @@ def process_video(src_fp):
     try: 
         copyfile(sfpn, dfpn)               
     except IOError:
-        print("Error: unable to move image file")
+        print("Error: unable to move video file")
         print("\tfilename  <{}>".format(s_fn))
         print("\tsource fp <{}>".format(src_fp))
         print("\tdest   fp <{}>".format(dest_fp))
@@ -156,8 +165,18 @@ def main():
  
     #------ process ------
     if options.input:
+        # input directory must exist
+        if not os.path.isdir(options.input):
+            print("Error:   processing input files has failed")
+            print("Warning: <{}> is ({})".format(options.input, os.path.isdir(options.input)))
+            print("")
+            sys.exit(1)
+        else:
+            msg("source: <{}>".format(options.input))
+
+
+
         # only load 'jpg' images
-        msg("path: <{}>".format(options.input))
         if options.jpg:
             
             afiles = get_fn_jpg(options.input)
@@ -166,17 +185,26 @@ def main():
         msg("files {}".format(afiles))
 
     
-        # where do the processed files go? 
+        # where do the processed files go?
+        dest_fp = ""
         if options.output:
             dest_fp = options.output
         else:
-            dest_fp = os.curdir
-
-
-        msg("destination: ({}) <{}>".format(len(afiles), afiles))
-        if not process(afiles, dest_fp):
-            print("Error: processing files has failed")
+            print("Error: Destination path must be supplied")
+            print("")
             sys.exit(1)
+            
+
+        
+        # process the files
+        if not process(afiles, dest_fp):
+            print("Error:   processing files has failed")
+            print("Warning: <{}> is ({})".format(dest_fp, os.path.isdir(dest_fp)))
+            print("")
+            sys.exit(1)
+        else:
+            msg("destination: ({}) <{}>".format(len(afiles), afiles))
+
         
 
 #----- main cli entry point ------

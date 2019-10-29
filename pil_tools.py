@@ -71,14 +71,17 @@ def calc_image_size(width, height, ratio, resize_width=WIDTH, resize_height=HEIG
 def pil_get_wh(fp, fn):
     """extract image height and width using PIL"""
     fpn = os.path.join(fp, fn)
-    h = 0
-    w = 0
-    try:
-        i = Image.open(fpn)
-        (w, h) = (i.width, i.height)
-    except IOError:
-        msg("Error: unable to resize image")
-        sys.exit(1)
+    if os.path.isfile(fpn):
+        h = 0
+        w = 0
+        try:
+            i = Image.open(fpn)
+            (w, h) = (i.width, i.height)
+        except IOError:
+            msg("Warning: cannot determine image height and width")
+            msg("Warning: problems with file <>".format(fpn))
+    else:
+        msg("Warning: could not find file <>".format(fpn))  
     return [w, h]
 #----------
 # image_ratio: find image ratio, width/height
@@ -95,6 +98,7 @@ def pil_image_ratio(fp, fn):
     width = 0
 
     height, width = pil_get_wh(fp, fn)
+
     ratio = width/height
     msg("ratio <{}>".format(ration))
 
@@ -121,11 +125,25 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn):
 
     # source filepath and nasrc_fp,me:
     sfpn = os.path.join(src_fp, s_fn)
-    msg("src <{}>".format(sfpn))
+    if not os.path.isfile(sfpn):
+        print("\n")
+        print("Error: cannot find specificed file <>".format(dfpn))
+        print("")
+        sys.exit(1)
+    else:
+        msg("src <{}>".format(sfpn))
 
     # destination filepath and name
-    dfpn = os.path.join(dest_fp, d_fn)   
-    msg("dest <{}>".format(dfpn))
+    dfpn = os.path.join(dest_fp, d_fn)  
+    if not os.path.isdir(dest_fp):
+        print("\n")
+        print("Error: destination file directory not found <{}>".format(dest_fp))
+        print("Error: cannot save file <{}>".format(dfpn))
+        print("")
+        sys.exit(1)
+    else:
+        msg("dest <{}>".format(dfpn))
+
 
     try:
 
@@ -155,13 +173,16 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn):
    
     except IOError:
         # we haven't found a way to process this
-        # file, skip but still WARN
-        print("Error: unable to resize image")
-        print("Error: unable to move image file")
+        # file, skip but still WARN? -- Na kill
+        print("\n")
+        print("Warning: unable to resize image")
+        print("Warning: unable to move image file at the moment")
         print("\tfilename  <{}>".format(s_fn))
         print("\tsource fp <{}>".format(src_fp))
         print("\tdest   fp <{}>".format(dest_fp))
+        print("")
         sys.exit(1)
+
 
     return True
 
@@ -175,7 +196,7 @@ def pil_detail(fp, fn):
     try:
         i = Image.open(fpn)
     except IOError:
-        print("Unable to load image")
+        print("Unable to load image to find information")
         sys.exit(1)
     msg("<{}>\n\tformat({}) size({}) mode:({})".format(fn, i.format, i.size, i.mode))
 #
