@@ -4,7 +4,9 @@
 
 #======
 # name: process.py
-# date: 2019OCT29
+# date: 2019NOV28
+#       2019NOV03
+#       2019OCT29
 #       2019SEP21
 #       2019SEP10
 # prog: pr
@@ -113,7 +115,7 @@ def process_image(src_fp, dest_fp, s_fn, d_fn):
     else:
       return True
 
-def process_video(src_fp):
+def process_video(src_fp, dest_fp, s_fn, d_fn):
     """process all the videos"""
     # move the file (we still want to use it)
     sfpn = os.path.join(src_fp, s_fn)

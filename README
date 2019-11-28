@@ -19,6 +19,11 @@
     nb: updated ip for gitolite? 
         try 'git remote set-url origin git@ip.address:pypilo'
 
+2019NOV28
+* beast failed on video upload
+- sig on process.process_image was wrong
+- fixed and tested 
+
 2019OCT29
 * ran into a problem with a smaller non standard image
 - would not upload or resize and halted to workflow

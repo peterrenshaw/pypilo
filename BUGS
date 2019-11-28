@@ -8,6 +8,28 @@
    \ \_\     /\___/\ \_\                    
     \/_/     \/__/  \/_/                    
 
+FAIL
+2019NOV03
+* probelms with .mp4 uploading and processing
+
+* error reported
+- debug off
+
+  pypilo pr$ ./process.py -i $HOME/work/flickr/2019/2019NOV/2019NOV03/d1/ -o $HOME/work/flickr/2019/2019NOV/2019NOV03/u1
+  ...+Traceback (most recent call last):
+    File "./process.py", line 212, in <module>
+      main()
+    File "./process.py", line 200, in main
+      if not process(afiles, dest_fp):
+    File "./process.py", line 77, in process
+      process_video(s_fp, dest_fp, s_fn, d_fn)
+  TypeError: process_video() takes 1 positional argument but 4 were given
+
+* change 
+
+   - process_video(s_fp, dest_fp, s_fn, d_fn)
+   + process_video(s_fp)
+
 
 FAIL
 2019OCT29
