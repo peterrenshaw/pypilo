@@ -39,6 +39,8 @@
 * set up new github pypilo
 - git remote add pypilo https://github.com/peterrenshaw/pypilo.git
 
+  <https://docs.github.com/en/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line>
+
 * hack checkin'
 - processed files
 - uploaded & worked
@@ -49,6 +51,8 @@
 * hack
 - tools.get_fn_png already exited
 - ext contst to pil_tools
+- sorc: <https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html#png>
+
 
 * default CLI input processes all supported files
 - png
