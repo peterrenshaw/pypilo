@@ -8,6 +8,9 @@
    \ \_\     /\___/\ \_\                    
     \/_/     \/__/  \/_/                    
 
+    Pre-processor for PyFlick. 
+    Images from desktop to Flickr.
+
 
     # default: process JPG/PNG images
     ./process.py -i path/to/source/image_dir/
@@ -33,11 +36,14 @@
         try 'git remote set-url origin git@ip.address:pypilo'
 
 2020AUG18
+* set up new github pypilo
+- git remote add pypilo https://github.com/peterrenshaw/pypilo.git
+
 * hack checkin'
 - processed files
 - uploaded & worked
 
-* provblem with tools.filepath2title
+* problem with tools.filepath2title
 - needs fixing.
 
 * hack
