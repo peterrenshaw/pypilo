@@ -9,15 +9,48 @@
     \/_/     \/__/  \/_/                    
 
 
-    ./process.py -i image 
-                 -o $HOME/work/code/py/pypilo/image
+    # default: process JPG images
+    ./process.py -i path/to/source/image_dir/
+                 -o path/to/destination/image_dir
+                (-j)
+
+    # process PNG images
+    ./process.py -i path/to/source/image_dir/
+                 -o path/to/destination/image_dir
+                 -p 
 
     -i source image directory
     -o processed image destination directory
+    -j process JPG images
+    -p process PNG images
     -h help
 
     nb: updated ip for gitolite? 
         try 'git remote set-url origin git@ip.address:pypilo'
+
+2020AUG18
+
+* TODO
+* EST: 1 Hour hack, 30min test & changes. 
+* Here's what we do: 
+- use command line option -p
+- add another command line option, -p forcing file .EXT to .png
+- defaults to -j which forces the file .EXT to .jpg
+
+- in process.py, the tools exist to differenciate file extensions
++ write another function to test this
+
+- in pil_tools.py, pil_resize is called
++ in the pil_tools.pil_resize a call to PIL image operations
+  might require some PNG specific changes.
++ it might pay to report EXT, ipso facto EXT might need to be
+  an argument or determined internally
+
+* what it doesn't process .png?
+- lets fix this
+
+* sorc <https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html#png>
+
 
 2019NOV28
 * beast failed on video upload
