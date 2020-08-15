@@ -27,8 +27,8 @@ import datetime
 
 #------ debug start ---------
 DEBUG = False
-def msg(msg):
-    if DEBUG: print("> {}".format(msg))
+def msg(msg, is_debug=DEBUG):
+    if is_debug: print("> {}".format(msg))
 #------ debug end ---------
 
 
@@ -85,12 +85,17 @@ def dt_build_date(yyyy, mmm, dd, hh=0, mm=0, ss=0):
     """
     dt = datetime.datetime(yyyy, mmm, dd, hh, mm, ss)
     return dt
-def dt_build_fn(ext='jpg'):
+def dt_build_fn(ext):
     """build extention type, build filename in date format"""
     dt = dt_get_now()
     fn = dt_date2str(dt, dt_format=DTF_YYYYMMMDDTHHMMSS_FN)
-    
+    msg("fn <{}.{}>".format(fn, ext)) 
     return "{}.{}".format(fn, ext)
+def dt_build_fn_jpg():
+    return dt_build_fn(ext='jpg')
+def dt_build_fn_png():
+    return dt_build_fn(ext='png')
+
 
 #------ date time end ------
 
@@ -125,7 +130,11 @@ def get_fn_jpg(filepath):
 def get_fn_jpeg(filepath):
     return get_filenames(filepath, "*.jpeg")
 def get_fn_png(filepath):
-    return get_filenames(filepath, "*.png")
+    lower_fn = get_filenames(filepath, "*.png")
+    upper_fn = get_filenames(filepath, "*.PNG")
+    fn = lower_fn + upper_fn
+    msg("fn <{}>".format(fn))
+    return fn 
 #---------
 # name: filepath2title:
 # desc: convert filepath (unix) to a filename
@@ -134,6 +143,9 @@ def get_fn_png(filepath):
 #---------
 def filepath2title(fpn):
     """
+    WARNING: IF THINGS ARE GOING TO FAIL, ITS MOST LIKELY HERE
+    FIXME. REMOVE THE SPLITTING OF FILES LOOKING FOR EXT.
+
     convert filepath (unix) to a filename use os.path.basename 
     to extract info
 
@@ -141,19 +153,39 @@ def filepath2title(fpn):
                   to   filename
           HACK add     filename + '.00'
     """
+    msg("filepath2title")
     if fpn:
         fp = os.path.dirname(fpn)
-        title = os.path.basename(fpn)
-        title = title.split('.')
+        original_fp = fp
+        fp = fp.replace(" ","-")
         
+        title = os.path.basename(fpn)
+        original_title = title
+        e = title.split('.')
+
+        # Oh bugger, dots in the file, 
+        # grab the last one, thats the ext.
+        if len(e) > 1:
+            ext = e[len(e)-1]
+
+        title = title.split(".{}".format(ext))
+        new_t = title[0]
+        new_t = new_t.replace(" ","-")
+        title = new_t.replace(".","-")
+
+        msg("title <{}> ext <{}>".format(title, ext))
+
+        new_title = "{}.{}".format(title, ext)
+
         # yyyymmmddhh.00.jpg OR some_filename.jpg?
-        if len(title) > 1: 
-            t = "{}.{}".format(title[0], title[1])
-        else:
-            t = "{}".format(title[0])
+        #if len(title) > 1: 
+        #    t = "{}.{}".format(title[0], title[1])
+        #else:
+        #    t = "{}".format(title[0])
+        msg("fp <{}> title <{}>".format(fp, original_title))
 
         # filepath, filename title
-        return [fp, t]
+        return [original_fp, original_title]
     else:
         return ""
 #------ filenames end ------

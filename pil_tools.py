@@ -31,9 +31,12 @@ from PIL import ImageEnhance
 
 from tools import msg
 
-
 WIDTH = 1330    # hard coded width max
 HEIGHT = 1000   # hard coded height max 
+
+IMG_PNG = 'png' # png file ext
+IMG_JPG = 'jpg' # jpg file ext
+VID_M4V = 'm4v' # m4v file ext
 
 
 #----------
@@ -119,19 +122,22 @@ def pil_image_ratio(fp, fn):
 #       the file. If you want to use the file, you will 
 #       have to copy the file over.
 #---------
-def pil_resize(src_fp, dest_fp, s_fn, d_fn):
+def pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
+    msg("pil_resize")
     msg("source fp <{}>".format(src_fp))
     msg("dest   fp <{}>".format(dest_fp))
 
     # source filepath and nasrc_fp,me:
     sfpn = os.path.join(src_fp, s_fn)
+    msg("1. sfpn <{}>".format(sfpn))
+
     if not os.path.isfile(sfpn):
         print("\n")
         print("Error: cannot find specificed file <>".format(dfpn))
         print("")
         sys.exit(1)
     else:
-        msg("src <{}>".format(sfpn))
+        msg("2. src <{}>".format(sfpn))
 
     # destination filepath and name
     dfpn = os.path.join(dest_fp, d_fn)  
@@ -142,11 +148,10 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn):
         print("")
         sys.exit(1)
     else:
-        msg("dest <{}>".format(dfpn))
+        msg("3. dest <{}>".format(dfpn))
 
-
+    msg("4. open <{}>".format(sfpn))
     try:
-
         # original image
         i = Image.open(sfpn)
         msg("height <{}>".format(i.height))
@@ -162,11 +167,13 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn):
         w, h = calc_image_size(i.width, i.height, r)
         msg("{}:{}".format(w, h))
 
+        msg("5. resize image")
         # resize image
         ir = i.resize((w, h))
 
+        msg("6. save image by TYPE")
         # save image
-        ir.save(dfpn, "JPEG")
+        ir.save(dfpn, ext)
 
         i = None
         ir = None

@@ -9,10 +9,14 @@
     \/_/     \/__/  \/_/                    
 
 
-    # default: process JPG images
+    # default: process JPG/PNG images
     ./process.py -i path/to/source/image_dir/
                  -o path/to/destination/image_dir
-                (-j)
+
+    # process JPG images
+    ./process.py -i path/to/source/image_dir/
+                 -o path/to/destination/image_dir
+                 -j 
 
     # process PNG images
     ./process.py -i path/to/source/image_dir/
@@ -29,8 +33,25 @@
         try 'git remote set-url origin git@ip.address:pypilo'
 
 2020AUG18
+* hack checkin'
+- processed files
+- uploaded & worked
+
+* provblem with tools.filepath2title
+- needs fixing.
+
+* hack
+- tools.get_fn_png already exited
+- ext contst to pil_tools
+
+* default CLI input processes all supported files
+- png
+- jpg
+- skips .mp4, etc.
 
 * TODO
+- checked the BUGS and todo file 
+
 * EST: 1 Hour hack, 30min test & changes. 
 * Here's what we do: 
 - use command line option -p

@@ -35,21 +35,40 @@ from optparse import OptionParser
 from tools import msg
 from tools import DEBUG
 from tools import get_fn_jpg
+from tools import get_fn_png 
 from tools import dt_get_now
 from tools import dt_date2str
 from tools import dt_build_fn
+from tools import dt_build_fn_png
+from tools import dt_build_fn_jpg
 from tools import get_filenames
 from tools import filepath2title
 from tools import DTF_YYYYMMMDDTHHMMSS_FN 
 
 
+from pil_tools import IMG_PNG
+from pil_tools import IMG_JPG
+from pil_tools import VID_M4V
 from pil_tools import pil_detail
 from pil_tools import pil_resize
 
 
-IMG_JPG = 'jpg'
-VID_M4V = 'm4v'
-
+#---------
+# is_file_xxx: input a filename, ext
+#              can the file be found?
+#---------
+def is_file_jpg(fn, ext=IMG_JPG):
+    fn = fn.lower()
+    msg("fn jpg <{}> is [{}]".format(fn, fn.find(ext)))
+    return (fn.find(ext) > 0)
+def is_file_png(fn, ext=IMG_PNG):
+    fn = fn.lower()
+    msg("fn png <{}> is [{}]".format(fn, fn.find(ext)))
+    return (fn.find(ext) > 0)
+def is_file_video(fn, ext=VID_M4V):
+    fn = fn.lower()
+    msg("fn m4v <{}> is [{}]".format(fn, fn.find(ext)))
+    return (fn.lower().find(ext) > 0)
 
 
 #---------
@@ -58,26 +77,33 @@ VID_M4V = 'm4v'
 # args: afiles - list of filepathnames
 #---------
 def process(afiles, dest_fp):
+    msg("process")
     if len(afiles) > 0: 
         # loop through the list of files
         msg("processing")
   
         afs = sorted(afiles)
         for s_fpn in afs:
+            msg("s_fpn <{}>".format(s_fpn))
             s_fp, s_fn = filepath2title(s_fpn)
             msg("source <{}> <{}>".format(s_fp, s_fn))
             if s_fn:
+                isf = os.path.isfile(s_fpn)
+                msg("file exist: <{}> is {}".format(s_fpn, isf ))
                 if os.path.isfile(s_fpn):
                     # process the files one by one
                     if is_file_jpg(s_fn):
-                        print('.', end='', flush=True)
-                        d_fn = dt_build_fn()
-                        process_image(s_fp, dest_fp, s_fn, d_fn)
-
+                        print('>', end='', flush=True)
+                        d_fn = dt_build_fn_jpg()
+                        process_image(s_fp, dest_fp, s_fn, d_fn, IMG_JPG)
+                    if is_file_png(s_fn):
+                        print('<', end='', flush=True)
+                        d_fn = dt_build_fn_png()
+                        process_image(s_fp, dest_fp, s_fn, d_fn, IMG_PNG)
                     elif is_file_video(s_fn):
-                        print('+', end='', flush=True)
+                        print('|', end='', flush=True)
                         d_fn = dt_build_fn(ext=VID_M4V)
-                        process_video(s_fp, dest_fp, s_fn, d_fn)
+                        process_video(s_fp, dest_fp, s_fn, d_fn, VID_M4V)
 
                     else: 
                         print("Warning: file not processed")
@@ -104,8 +130,12 @@ def process(afiles, dest_fp):
 # TODO: find todays date in YYYY,YYYYMMM format and add as 
 #       default tags
 #---------
-def process_image(src_fp, dest_fp, s_fn, d_fn):
-    if not pil_resize(src_fp, dest_fp, s_fn, d_fn):
+def process_image(src_fp, dest_fp, s_fn, d_fn, ext):
+    msg("sr_fp {}".format(src_fp))
+    msg("dest_fp {}".format(dest_fp))
+    msg("s_fn {}".format(s_fn))
+    msg("d_fn {}".format(d_fn))
+    if not pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
       sfpn = os.path.join(src_fp, s_fn)
       dfpn = os.path.join(dest_fp, d_fn)
       msg("warning: image <{}> cannot be resized".format(sfpn))
@@ -137,14 +167,6 @@ def process_video(src_fp, dest_fp, s_fn, d_fn):
  
     return True
 
-def is_file_jpg(fn, ext=IMG_JPG):
-    f = fn.lower()
-    return (f.find(ext) > 0)
-def is_file_video(fn, ext=VID_M4V):
-    f = fn.lower()
-    return (f.lower().find(ext) > 0)
-
-
 #---------
 # desc: main cli method
 #---------
@@ -161,6 +183,9 @@ def main():
     parser.add_option("-j", "--jpg", dest="jpg",
                       action="store_true", 
                       help="process only jpg files")
+    parser.add_option("-p", "--png", dest="png",
+                      action="store_true", 
+                      help="process only png files")
 
     #------ options ------ 
     options, args = parser.parse_args()  
@@ -175,18 +200,21 @@ def main():
             print("")
             sys.exit(1)
         else:
-            msg("source: <{}>".format(options.input))
+            msg("source: <{}> is dir {}".format(options.input, os.path.isdir(options.input)))
 
 
 
         # only load 'jpg' images
         if options.jpg:
-            
             afiles = get_fn_jpg(options.input)
+        # only load 'png' images
+        if options.png:
+            afiles = get_fn_png(options.input)
+        # load all the files, skip the ones we can't work with
         else:
             afiles = get_filenames(options.input)
         msg("files {}".format(afiles))
-
+        
     
         # where do the processed files go?
         dest_fp = ""
