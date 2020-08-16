@@ -37,6 +37,40 @@
 
 
 2020AUG19
+* still testing
+
+* working on:
+- smoke test images
+- jpg images
+- png images
+- video 
+
+* if a small image is being resized, why?
+- test if size < resize, if so don't resize
+- resizing puts artifacts into images.
+
+* error in logic for process.process
+- reporting not processed, in fact had
+
+* next refactor use below code for ext in tools.filepath2title 
+
+    ext = os.path.splitext(filename)[1].lower()
+
+* smoke test
+
+- bug: donno why or how to fix: see BUGS
+
+- wow uncovered something I didn't think about:
+
+  The original code was written to handle uniform images
+  with uniform regular filenames, sizes etc.
+
+- so when I use test data with lots of various parameters
+  things like re-sizing are going show up.
+
+- tools.filepath2title, 2 bugs
+- pil_tools.pil_resize 1 bug
+
 * view through changes made
 - process.main cleared up
 

@@ -8,6 +8,64 @@
    \ \_\     /\___/\ \_\                    
     \/_/     \/__/  \/_/                    
 
+
+FAIL
+2020AUG16
+* problem resizing one odd size, jpg image
+* error reported, debug on
+
+    pmbp:2020AUG16 pr$ $HOME/work/code/py/pypilo/process.py -i d1/ -o u1/
+    > source: <d1/> is dir True
+    > tools.get_filenames.filepath <d1/>
+    > tools.get_filenames.fpn <d1/*.*>
+    > tools.get_filenames <['d1/wilkesneilyoungfireplace.jpg']>
+    > files ['d1/wilkesneilyoungfireplace.jpg']
+    > process
+    > processing
+    > sfpn <d1/wilkesneilyoungfireplace.jpg>
+    > filepath2title
+    > filepath <d1>
+    > filename <wilkesneilyoungfireplace.jpg>
+    > source filepath <d1>
+    > source filename <wilkesneilyoungfireplace.jpg>
+    > file exist: <d1/wilkesneilyoungfireplace.jpg> is True
+    > fn jpg <wilkesneilyoungfireplace.jpg> is [25]
+    >> fn <2020AUG161414520.244.jpg>
+    > sr_fp d1
+    > dest_fp u1/
+    > s_fn wilkesneilyoungfireplace.jpg
+    > d_fn 2020AUG161414520.244.jpg
+    > pil_resize
+    > source fp <d1>
+    > dest   fp <u1/>
+    > 1. sfpn <d1/wilkesneilyoungfireplace.jpg>
+    > 2. src <d1/wilkesneilyoungfireplace.jpg>
+    > 3. dest <u1/2020AUG161414520.244.jpg>
+    > 4. open <d1/wilkesneilyoungfireplace.jpg>
+    > height <207>
+    > width  <300>
+    > ratio <1.4492753623188406>
+    > setting image w<1330> h<917> r<1.4492753623188406>
+    > w (1330) h (917)
+    > 5. resize image
+    > 6. save image by TYPE
+    > dfpn <u1/2020AUG161414520.244.jpg>
+    > ext <jpg>
+    Traceback (most recent call last):
+      File "/Users/pr/work/code/py/pypilo/process.py", line 262, in <module>
+        main()
+      File "/Users/pr/work/code/py/pypilo/process.py", line 250, in main
+        if process(afiles, dest_fp):
+      File "/Users/pr/work/code/py/pypilo/process.py", line 109, in process
+        process_image(sfp, dfp, sfn, dfn, IMG_JPG)
+      File "/Users/pr/work/code/py/pypilo/process.py", line 153, in process_image
+        if not pil_resize(sfp, dfp, sfn, dfn, ext):
+      File "/Users/pr/work/code/py/pypilo/pil_tools.py", line 189, in pil_resize
+        ir.save(dfpn, ext)
+      File "/opt/local/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/Pillow-6.2.0.dev0-py3.8-macosx-10.14-x86_64.egg/PIL/Image.py", line 2073, in save
+      KeyError: 'JPG'
+
+
 FAIL
 2019NOV03
 * probelms with .mp4 uploading and processing

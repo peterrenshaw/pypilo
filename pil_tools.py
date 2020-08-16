@@ -53,20 +53,26 @@ def calc_image_size(width, height, ratio,
     width, height and known image ratio, resize 
     width and height to fixed dimensions.
     """
-    # image is wider than higher
-    if width > height:
-        w = resize_width #WIDTH
-        h = int(w / ratio)
+    # image need to be resized?
+    if resize_width < width and resize_height < height:
 
-    # image is taller than wider
-    elif width < height:
-        w = resize_height #HEIGHT
-        h = int(w / ratio)
+        # image is wider than higher
+        if width > height:
+            w = resize_width #WIDTH
+            h = int(w / ratio)
 
-    # image is square
+        # image is taller than wider
+        elif width < height:
+            w = resize_height #HEIGHT
+            h = int(w / ratio)
+
+        # image is square
+        else:
+            w = int(height * ratio)
+            h = int(width * ratio)
     else:
-        w = int(height * ratio)
-        h = int(width * ratio)
+        w = int(width)
+        h = int(height)
 
     msg("setting image w<{}> h<{}> r<{}>".format(w, h, ratio))
 
@@ -130,19 +136,21 @@ def pil_image_ratio(fp, fn):
 #       the file. If you want to use the file, you will 
 #       have to copy the file over.
 #---------
-def pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
+def pil_resize(sfp, dfp, sfn, dfn, ext):
     msg("pil_resize")
-    msg("source fp <{}>".format(src_fp))
-    msg("dest   fp <{}>".format(dest_fp))
+    msg("source fp <{}>".format(sfp))
+    msg("dest   fp <{}>".format(dfp))
 
     # source filepath and nasrc_fp,me:
-    sfpn = os.path.join(src_fp, s_fn)
+    sfpn = os.path.join(sfp, sfn)
     msg("1. sfpn <{}>".format(sfpn))
+    msg("    sfp <{}>".format(sfp))
+    msg("    sfn <{}>".format(sfn))
 
     # valid source filepath name?
     if not os.path.isfile(sfpn):
         print("\n")
-        print("Error: cannot find specificed file <>".format(dfpn))
+        print("Error: cannot find specificed file <>".format(sfpn))
         print("")
         sys.exit(1)
     msg("2. src <{}>".format(sfpn))
@@ -153,11 +161,11 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
     # directory. Best not spew files all
     # over the place when most likely the
     # error is operator on CLI.
-    msg("3. dest <{}>".format(dfpn))
-    dfpn = os.path.join(dest_fp, d_fn)  
-    if not os.path.isdir(dest_fp):
+    dfpn = os.path.join(dfp, dfn)
+    msg("3. dest <{}>".format(dfpn)) 
+    if not os.path.isdir(dfp):
         print("\n")
-        print("Error: destination file directory not found <{}>".format(dest_fp))
+        print("Error: destination file directory not found <{}>".format(dfp))
         print("Error: cannot save file <{}>".format(dfpn))
         print("")
         sys.exit(1)
@@ -166,24 +174,27 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
     msg("4. open <{}>".format(sfpn))
     try:
         # original image
-        i = Image.open(sfpn)
+        i = Image.open(fp=sfpn)
         msg("height <{}>".format(i.height))
         msg("width  <{}>".format(i.width))
 
         # find image ratio
         #r = c_image_ratio_hw(i.height, i.width)
         r = image_ratio(i.width, i.height)
-        msg("ratio <{}>".format(r))
+        msg("ratio <{}>".format(r))       
 
         # set new image width and height f
         w, h = calc_image_size(i.width, i.height, r)
-        msg("{}:{}".format(w, h))
+        msg("w ({}) h ({})".format(w, h))
 
         msg("5. resize image")
         ir = i.resize((w, h))
 
         msg("6. save image by TYPE")
-        ir.save(dfpn, ext)
+        msg("dfpn <{}>".format(dfpn))
+        msg("ext <{}>".format(ext))
+
+        ir.save(dfpn)
 
         i = None
         ir = None
@@ -194,9 +205,9 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
         print("\n")
         print("Warning: unable to resize image")
         print("Warning: unable to move image file at the moment")
-        print("\tfilename  <{}>".format(s_fn))
-        print("\tsource fp <{}>".format(src_fp))
-        print("\tdest   fp <{}>".format(dest_fp))
+        print("\tfilename  <{}>".format(sfn))
+        print("\tsource fp <{}>".format(sfp))
+        print("\tdest   fp <{}>".format(dfp))
         print("")
         sys.exit(1)
 

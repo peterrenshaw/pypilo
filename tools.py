@@ -149,13 +149,13 @@ def filepath2title(fpn):
     """
     msg("filepath2title")
     if os.path.isfile(fpn):
-        fn = os.path.dirname(fpn)
-        fp = os.path.basename(fpn)
+        fp = os.path.dirname(fpn)
+        fn = os.path.basename(fpn)
 
         msg("filepath <{}>".format(fp))
-        msg("filename <{}>".format(fn)
+        msg("filename <{}>".format(fn))
 
-        return [filepath, filename]
+        return [fp, fn]
     else:
         msg("Warning: <{}> is invalid")
         return ""

@@ -57,67 +57,73 @@ from pil_tools import pil_resize
 # is_file_xxx: input a filename, ext
 #              can the file be found?
 #---------
+def get_file_ext(fnp):
+    ext = os.path.splitext(fnp)[1].lower()
+    ext = ext.replace(".","")
+    return ext
+def is_file_ext(fn, ext):
+    fn = fn.lower()
+    e = get_file_ext(fn)
+    msg("fn=<{}> ext=<{}> ({})".format(fn, e,  (e == ext)))
+    return (e == ext)
 def is_file_jpg(fn, ext=IMG_JPG):
-    fn = fn.lower()
-    msg("fn jpg <{}> is [{}]".format(fn, fn.find(ext)))
-    return (fn.find(ext) > 0)
+    return is_file_ext(fn, ext)
 def is_file_png(fn, ext=IMG_PNG):
-    fn = fn.lower()
-    msg("fn png <{}> is [{}]".format(fn, fn.find(ext)))
-    return (fn.find(ext) > 0)
+    return is_file_ext(fn, ext)
 def is_file_video(fn, ext=VID_M4V):
-    fn = fn.lower()
-    msg("fn m4v <{}> is [{}]".format(fn, fn.find(ext)))
-    return (fn.lower().find(ext) > 0)
-
+    return is_file_ext(fn, ext)
 
 #---------
 # name: process
 # desc: wrapper for image and video processing
 # args: afiles - list of filepathnames
 #---------
-def process(afiles, dest_fp):
+def process(afiles, dfp):
     msg("process")
     if len(afiles) > 0: 
         # loop through the list of files
         msg("processing")
   
         afs = sorted(afiles)
-        for s_fpn in afs:
-            msg("s_fpn <{}>".format(s_fpn))
-            s_fp, s_fn = filepath2title(s_fpn)
-            msg("source <{}> <{}>".format(s_fp, s_fn))
-            if s_fn:
-                isf = os.path.isfile(s_fpn)
-                msg("file exist: <{}> is {}".format(s_fpn, isf ))
+        for sfpn in afs:
+            msg("sfpn <{}>".format(sfpn))
+
+            # extract filepath and filename
+            sfp, sfn = filepath2title(sfpn)
+            msg("source filepath <{}>".format(sfp))
+            msg("source filename <{}>".format(sfn))
+
+            if sfn:
+                isf = os.path.isfile(sfpn)
+                msg("file exist: <{}> is {}".format(sfpn, isf ))
 
                 # process file depending on file extension
                 # if supported, process otherwise flag and
                 # continue.
-                if os.path.isfile(s_fpn):
+                if os.path.isfile(sfpn):
                     # process the files one by one
-                    if is_file_jpg(s_fn):
+                    if is_file_jpg(sfn):
 
                         print('>', end='', flush=True)
-                        d_fn = dt_build_fn_jpg()
-                        process_image(s_fp, dest_fp, s_fn, d_fn, IMG_JPG)
-                    if is_file_png(s_fn):
+                        dfn = dt_build_fn_jpg()
+                        process_image(sfp, dfp, sfn, dfn, IMG_JPG)
+                    elif is_file_png(sfn):
 
                         print('<', end='', flush=True)
-                        d_fn = dt_build_fn_png()
-                        process_image(s_fp, dest_fp, s_fn, d_fn, IMG_PNG)
-                    elif is_file_video(s_fn):
+                        dfn = dt_build_fn_png()
+                        process_image(sfp, dfp, sfn, dfn, IMG_PNG)
+                    elif is_file_video(sfn):
 
                         print('|', end='', flush=True)
-                        d_fn = dt_build_fn(ext=VID_M4V)
-                        process_video(s_fp, dest_fp, s_fn, d_fn, VID_M4V)
+                        dfn = dt_build_fn(ext=VID_M4V)
+                        process_video(sfp, dfp, sfn, dfn)
                     else: 
                         msg("Warning: file not processed")
-                        print("?".format(s_fn))
+                        print("? <{}>".format(sfn))
 
                 else:
                     print("warning: the source file is not found")
-                    print("         <{}>".format(s_fn))
+                    print("         <{}>".format(sfn))
                     pass
             else:
                break    
@@ -136,17 +142,17 @@ def process(afiles, dest_fp):
 # TODO: find todays date in YYYY,YYYYMMM format and add as 
 #       default tags
 #---------
-def process_image(src_fp, dest_fp, s_fn, d_fn, ext):
-    msg("sr_fp {}".format(src_fp))
-    msg("dest_fp {}".format(dest_fp))
-    msg("s_fn {}".format(s_fn))
-    msg("d_fn {}".format(d_fn))
+def process_image(sfp, dfp, sfn, dfn, ext):
+    msg("sr_fp {}".format(sfp))
+    msg("dest_fp {}".format(dfp))
+    msg("s_fn {}".format(sfn))
+    msg("d_fn {}".format(dfn))
 
     # resize or fail
     # TODO: Why is this happening
-    if not pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
-      sfpn = os.path.join(src_fp, s_fn)
-      dfpn = os.path.join(dest_fp, d_fn)
+    if not pil_resize(sfp, dfp, sfn, dfn, ext):
+      sfpn = os.path.join(sfp, sfn)
+      dfpn = os.path.join(dfp, dfn)
       msg("warning: image <{}> cannot be resized".format(sfpn))
       msg("move <{}> to <{}>".format(sfpn, dfpn))
       copyfile(sfpn, dfpn) 
@@ -156,20 +162,20 @@ def process_image(src_fp, dest_fp, s_fn, d_fn, ext):
     else:
       return True
 
-def process_video(src_fp, dest_fp, s_fn, d_fn):
+def process_video(sfp, dfp, sfn, dfn):
     """process all the videos"""
     # move the file (we still want to use it)
-    sfpn = os.path.join(src_fp, s_fn)
-    dfpn = os.path.join(dest_fp, d_fn)
+    sfpn = os.path.join(sfp, sfn)
+    dfpn = os.path.join(dfp, dfn)
     msg("move <{}> to <{}>".format(sfpn, dfpn))
 
     try: 
         copyfile(sfpn, dfpn)               
     except IOError:
         print("Error: unable to move video file")
-        print("\tfilename  <{}>".format(s_fn))
-        print("\tsource fp <{}>".format(src_fp))
-        print("\tdest   fp <{}>".format(dest_fp))
+        print("\tfilename  <{}>".format(sfn))
+        print("\tsource fp <{}>".format(sfp))
+        print("\tdest   fp <{}>".format(dfp))
         print("\tsfpn <{}>".format(sfpn))
         print("\tdfpn <{}>".format(dfpn))
      
@@ -224,7 +230,6 @@ def main():
         else:
             afiles = get_filenames(options.input)
         msg("files {}".format(afiles))
-        
     
         # where do the processed files go?
         dest_fp = ""
