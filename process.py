@@ -119,7 +119,8 @@ def process(afiles, dfp):
                         process_video(sfp, dfp, sfn, dfn)
                     else: 
                         msg("Warning: file not processed")
-                        print("? <{}>".format(sfn))
+                        msg("source filename <{}>".format(sfn))
+                        print("?")
 
                 else:
                     print("warning: the source file is not found")
