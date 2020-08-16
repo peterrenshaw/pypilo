@@ -90,24 +90,30 @@ def process(afiles, dest_fp):
             if s_fn:
                 isf = os.path.isfile(s_fpn)
                 msg("file exist: <{}> is {}".format(s_fpn, isf ))
+
+                # process file depending on file extension
+                # if supported, process otherwise flag and
+                # continue.
                 if os.path.isfile(s_fpn):
                     # process the files one by one
                     if is_file_jpg(s_fn):
+
                         print('>', end='', flush=True)
                         d_fn = dt_build_fn_jpg()
                         process_image(s_fp, dest_fp, s_fn, d_fn, IMG_JPG)
                     if is_file_png(s_fn):
+
                         print('<', end='', flush=True)
                         d_fn = dt_build_fn_png()
                         process_image(s_fp, dest_fp, s_fn, d_fn, IMG_PNG)
                     elif is_file_video(s_fn):
+
                         print('|', end='', flush=True)
                         d_fn = dt_build_fn(ext=VID_M4V)
                         process_video(s_fp, dest_fp, s_fn, d_fn, VID_M4V)
-
                     else: 
-                        print("Warning: file not processed")
-                        print("\t<{}>".format(s_fn))
+                        msg("Warning: file not processed")
+                        print("?".format(s_fn))
 
                 else:
                     print("warning: the source file is not found")
@@ -135,13 +141,17 @@ def process_image(src_fp, dest_fp, s_fn, d_fn, ext):
     msg("dest_fp {}".format(dest_fp))
     msg("s_fn {}".format(s_fn))
     msg("d_fn {}".format(d_fn))
+
+    # resize or fail
+    # TODO: Why is this happening
     if not pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
       sfpn = os.path.join(src_fp, s_fn)
       dfpn = os.path.join(dest_fp, d_fn)
       msg("warning: image <{}> cannot be resized".format(sfpn))
       msg("move <{}> to <{}>".format(sfpn, dfpn))
-      copyfile(sfpn, dfpn)    
+      copyfile(sfpn, dfpn) 
       #sys.exit(1)
+
       return False
     else:
       return True
@@ -202,14 +212,14 @@ def main():
         else:
             msg("source: <{}> is dir {}".format(options.input, os.path.isdir(options.input)))
 
-
-
         # only load 'jpg' images
         if options.jpg:
             afiles = get_fn_jpg(options.input)
+
         # only load 'png' images
-        if options.png:
+        elif options.png:
             afiles = get_fn_png(options.input)
+
         # load all the files, skip the ones we can't work with
         else:
             afiles = get_filenames(options.input)
@@ -219,22 +229,26 @@ def main():
         # where do the processed files go?
         dest_fp = ""
         if options.output:
-            dest_fp = options.output
+            if os.path.isdir(options.output):
+                dest_fp = options.output
+            else:
+                print("Warning: Trying to save files to an invalid directory")
+                print("         I suggest manually creating the directory")
+                print("")
+                sys.exit(1)
         else:
             print("Error: Destination path must be supplied")
             print("")
             sys.exit(1)
             
-
-        
         # process the files
-        if not process(afiles, dest_fp):
+        if process(afiles, dest_fp):
+            msg("destination: ({}) <{}>".format(len(afiles), afiles))
+        else:
             print("Error:   processing files has failed")
             print("Warning: <{}> is ({})".format(dest_fp, os.path.isdir(dest_fp)))
             print("")
             sys.exit(1)
-        else:
-            msg("destination: ({}) <{}>".format(len(afiles), afiles))
 
         
 

@@ -4,7 +4,8 @@
 
 #======
 # name: pil_tools.py
-# date: 2019SEP17
+# date: 2020AUG16
+#       2019SEP17
 # prog: pr
 # desc: tools for image processing
 # urls: PIL
@@ -31,6 +32,7 @@ from PIL import ImageEnhance
 
 from tools import msg
 
+
 WIDTH = 1330    # hard coded width max
 HEIGHT = 1000   # hard coded height max 
 
@@ -43,24 +45,29 @@ VID_M4V = 'm4v' # m4v file ext
 # calc_image_size: resize height and width given ratio
 #                  this is specifically for flickr
 #----------
-def calc_image_size(width, height, ratio, resize_width=WIDTH, resize_height=HEIGHT):
+def calc_image_size(width, height, ratio, 
+                    resize_width=WIDTH,
+                    resize_height=HEIGHT):
     """  
-    given height, width and ration: resize image width, height 
-    and known image ratio, resize width and height to fixed 
-    dimensions.
+    given height, width and ration: resize image 
+    width, height and known image ratio, resize 
+    width and height to fixed dimensions.
     """
     # image is wider than higher
     if width > height:
         w = resize_width #WIDTH
         h = int(w / ratio)
+
     # image is taller than wider
     elif width < height:
         w = resize_height #HEIGHT
         h = int(w / ratio)
+
     # image is square
     else:
         w = int(height * ratio)
         h = int(width * ratio)
+
     msg("setting image w<{}> h<{}> r<{}>".format(w, h, ratio))
 
     return (w, h)
@@ -70,6 +77,7 @@ def calc_image_size(width, height, ratio, resize_width=WIDTH, resize_height=HEIG
 
 #----------
 # pil_get_wh: get the image width and height using PIL
+#             WARN on error, do not fail
 #----------
 def pil_get_wh(fp, fn):
     """extract image height and width using PIL"""
@@ -131,15 +139,21 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
     sfpn = os.path.join(src_fp, s_fn)
     msg("1. sfpn <{}>".format(sfpn))
 
+    # valid source filepath name?
     if not os.path.isfile(sfpn):
         print("\n")
         print("Error: cannot find specificed file <>".format(dfpn))
         print("")
         sys.exit(1)
-    else:
-        msg("2. src <{}>".format(sfpn))
+    msg("2. src <{}>".format(sfpn))
+
 
     # destination filepath and name
+    # fail if you cannot find destination
+    # directory. Best not spew files all
+    # over the place when most likely the
+    # error is operator on CLI.
+    msg("3. dest <{}>".format(dfpn))
     dfpn = os.path.join(dest_fp, d_fn)  
     if not os.path.isdir(dest_fp):
         print("\n")
@@ -147,8 +161,7 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
         print("Error: cannot save file <{}>".format(dfpn))
         print("")
         sys.exit(1)
-    else:
-        msg("3. dest <{}>".format(dfpn))
+        
 
     msg("4. open <{}>".format(sfpn))
     try:
@@ -162,17 +175,14 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
         r = image_ratio(i.width, i.height)
         msg("ratio <{}>".format(r))
 
-
         # set new image width and height f
         w, h = calc_image_size(i.width, i.height, r)
         msg("{}:{}".format(w, h))
 
         msg("5. resize image")
-        # resize image
         ir = i.resize((w, h))
 
         msg("6. save image by TYPE")
-        # save image
         ir.save(dfpn, ext)
 
         i = None
@@ -189,7 +199,6 @@ def pil_resize(src_fp, dest_fp, s_fn, d_fn, ext):
         print("\tdest   fp <{}>".format(dest_fp))
         print("")
         sys.exit(1)
-
 
     return True
 

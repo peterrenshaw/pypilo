@@ -35,6 +35,21 @@
     nb: updated ip for gitolite? 
         try 'git remote set-url origin git@ip.address:pypilo'
 
+
+2020AUG19
+* view through changes made
+- process.main cleared up
+
+- process.process_image 
++ needs another look at
+
+- cleaned up pil_tools.py
+
+
+- cleaned up tools.py
+- tools.filepath2title: What was I thinking writing this? 
+- Fixed and simplified to shite.
+
 2020AUG18
 * set up new github pypilo
 - git remote add pypilo https://github.com/peterrenshaw/pypilo.git
